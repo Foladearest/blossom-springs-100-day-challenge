@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Blossom Springs 100-Day Challenge Tracker - Track your progress, celebrate milestones, and achieve your goals.">
+    <meta name="theme-color" content="#d8b5e8">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Blossom Springs">
+    
+    <title>Blossom Springs 100-Day Challenge Tracker</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect fill='%23d8b5e8' width='180' height='180'/><circle cx='90' cy='90' r='40' fill='%2381c784'/></svg>">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect fill='%23d8b5e8' width='180' height='180'/><circle cx='90' cy='90' r='40' fill='%2381c784'/></svg>">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header Section -->
+        <header class="header">
+            <div class="header-content">
+                <div class="branding">
+                    <h1 class="app-title">🌸 Blossom Springs</h1>
+                    <p class="app-subtitle">100-Day Challenge Tracker</p>
+                </div>
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+                    <span class="theme-icon">🌙</span>
+                </button>
+            </div>
+            <p class="inspirational-quote">"Small daily actions create extraordinary results."</p>
+        </header>
+
+        <!-- Motivation Quote of the Day -->
+        <section class="quote-section">
+            <p id="dailyQuote" class="quote-text">Loading your daily inspiration...</p>
+        </section>
+
+        <!-- User Profile Section -->
+        <section class="section profile-section">
+            <h2 class="section-title">Your Challenge</h2>
+            <div class="form-group">
+                <label for="userName">Your Name</label>
+                <input type="text" id="userName" placeholder="Enter your name" class="input-field">
+            </div>
+            <div class="form-group">
+                <label for="userGoal">Your Goal</label>
+                <input type="text" id="userGoal" placeholder="What do you want to achieve?" class="input-field">
+            </div>
+            <div class="form-group">
+                <label for="startDate">Start Date</label>
+                <input type="date" id="startDate" class="input-field">
+            </div>
+        </section>
+
+        <!-- Progress Dashboard -->
+        <section class="section dashboard-section">
+            <h2 class="section-title">Progress Dashboard</h2>
+            <div class="dashboard-grid">
+                <div class="dashboard-card">
+                    <div class="card-value" id="daysCompleted">0</div>
+                    <div class="card-label">Days Completed</div>
+                </div>
+                <div class="dashboard-card">
+                    <div class="card-value" id="progressPercentage">0%</div>
+                    <div class="card-label">Progress</div>
+                </div>
+                <div class="dashboard-card">
+                    <div class="card-value" id="currentStreak">0</div>
+                    <div class="card-label">Current Streak</div>
+                </div>
+                <div class="dashboard-card">
+                    <div class="card-value" id="daysRemaining">100</div>
+                    <div class="card-label">Days Left</div>
+                </div>
+            </div>
+            
+            <!-- Progress Bar -->
+            <div class="progress-bar-container">
+                <div class="progress-bar" id="progressBar" style="width: 0%"></div>
+            </div>
+            <p class="progress-text" id="progressText">Start your journey today!</p>
+        </section>
+
+        <!-- Milestone Celebrations -->
+        <section class="milestone-section" id="milestoneSection" style="display: none;">
+            <div class="milestone-content">
+                <h3 id="milestoneTitle">🎉 Milestone Reached! 🎉</h3>
+                <p id="milestoneMessage">You're making incredible progress!</p>
+                <button class="btn btn-primary" onclick="closeMilestone()">Continue Your Journey</button>
+            </div>
+        </section>
+
+        <!-- Completion Certificate (Hidden by default) -->
+        <section class="certificate-section" id="certificateSection" style="display: none;">
+            <div class="certificate">
+                <div class="certificate-header">
+                    <h2>🏆 Certificate of Achievement 🏆</h2>
+                </div>
+                <div class="certificate-body">
+                    <p class="cert-text">This is to certify that</p>
+                    <p class="cert-name" id="certName">Participant</p>
+                    <p class="cert-text">has successfully completed the</p>
+                    <p class="cert-title">Blossom Springs 100-Day Challenge</p>
+                    <p class="cert-text">achieving their goal of</p>
+                    <p class="cert-goal" id="certGoal">personal growth</p>
+                    <p class="cert-text">Completed on <span id="certDate">Date</span></p>
+                </div>
+                <div class="certificate-footer">
+                    <p>Blossom Springs Team</p>
+                </div>
+            </div>
+            <div class="certificate-actions">
+                <button class="btn btn-primary" onclick="downloadCertificate()">Download Certificate</button>
+                <button class="btn btn-secondary" onclick="closeCertificate()">Close</button>
+            </div>
+        </section>
+
+        <!-- 100-Day Tracker Grid -->
+        <section class="section tracker-section">
+            <h2 class="section-title">Your 100-Day Tracker</h2>
+            <div class="tracker-grid" id="trackerGrid">
+                <!-- 100 circles will be generated by JavaScript -->
+            </div>
+        </section>
+
+        <!-- Weekly Reflection Section -->
+        <section class="section reflection-section">
+            <h2 class="section-title">Weekly Reflection</h2>
+            <div class="form-group">
+                <label for="weeklyReflection">What's on your mind this week?</label>
+                <textarea id="weeklyReflection" placeholder="Write your thoughts, progress, and observations..." class="textarea-field" rows="5"></textarea>
+            </div>
+            <p class="auto-save-note">💾 Auto-saved to your device</p>
+        </section>
+
+        <!-- Accountability Features Section -->
+        <section class="section accountability-section">
+            <h2 class="section-title">Progress Summary</h2>
+            <button class="btn btn-primary" onclick="generateSummary()">Generate Summary Card</button>
+            <div id="summaryCard" class="summary-card" style="display: none;">
+                <div class="summary-content">
+                    <div class="summary-header">
+                        <h3 id="summaryName">Challenge Tracker</h3>
+                    </div>
+                    <div class="summary-body">
+                        <p><strong>Goal:</strong> <span id="summaryGoal">Not set</span></p>
+                        <p><strong>Completion:</strong> <span id="summaryCompletion">0%</span></p>
+                        <p><strong>Current Streak:</strong> <span id="summaryStreak">0 days</span></p>
+                        <p><strong>Days Completed:</strong> <span id="summaryDays">0 days</span></p>
+                        <p><strong>Generated:</strong> <span id="summaryDate">Date</span></p>
+                    </div>
+                </div>
+                <button class="btn btn-secondary" onclick="shareProgress()">Share on WhatsApp</button>
+            </div>
+        </section>
+
+        <!-- Action Buttons -->
+        <section class="section actions-section">
+            <button class="btn btn-secondary" onclick="resetChallenge()">Reset Challenge</button>
+            <button class="btn btn-secondary" onclick="installPWA()" id="installButton" style="display: none;">Install App</button>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>Blossom Springs © 2024 | Made with 💜 for your growth</p>
+        </footer>
+    </div>
+
+    <!-- Confetti Container -->
+    <div id="confettiContainer"></div>
+
+    <!-- Service Worker Registration -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('service-worker.js')
+                .then(reg => console.log('Service Worker registered'))
+                .catch(err => console.log('Service Worker registration failed:', err));
+        }
+    </script>
+
+    <script src="script.js"></script>
+</body>
+</html>
