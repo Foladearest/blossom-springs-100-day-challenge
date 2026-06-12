@@ -3,40 +3,419 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Blossom Springs 100-Day Challenge Tracker - Track your progress, celebrate milestones, and achieve your goals.">
+    <meta name="description" content="Blossom Springs 100-Day Challenge Tracker">
     <meta name="theme-color" content="#d8b5e8">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="apple-mobile-web-app-title" content="Blossom Springs">
-    
     <title>Blossom Springs 100-Day Challenge Tracker</title>
-    <link rel="manifest" href="manifest.json">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect fill='%23d8b5e8' width='180' height='180'/><circle cx='90' cy='90' r='40' fill='%2381c784'/></svg>">
-    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect fill='%23d8b5e8' width='180' height='180'/><circle cx='90' cy='90' r='40' fill='%2381c784'/></svg>">
-    <link rel="stylesheet" href="styles.css">
+    <style>
+        :root {
+            --primary-purple: #d8b5e8;
+            --secondary-purple: #b896d8;
+            --dark-purple: #9966cc;
+            --light-purple: #e8d5f2;
+            --accent-green: #81c784;
+            --light-green: #c8e6c9;
+            --soft-pink: #f8bbd0;
+            --warm-beige: #f5e6d3;
+            --text-dark: #2c2c2c;
+            --text-light: #666666;
+            --background-light: #fafaf8;
+            --border-color: #e0e0e0;
+        }
+
+        body.dark-mode {
+            --text-dark: #f5f5f5;
+            --text-light: #b0b0b0;
+            --background-light: #1a1a1a;
+            --border-color: #404040;
+            --warm-beige: #2a2a2a;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--background-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 0;
+            background-color: var(--background-light);
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary-purple) 0%, var(--secondary-purple) 100%);
+            color: white;
+            padding: 30px 20px 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .branding { flex: 1; }
+
+        .app-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin: 0;
+            letter-spacing: -0.5px;
+        }
+
+        .app-subtitle {
+            font-size: 14px;
+            font-weight: 300;
+            margin: 5px 0 0;
+            opacity: 0.95;
+        }
+
+        .theme-toggle {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            font-size: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:active {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(0.95);
+        }
+
+        .inspirational-quote {
+            font-size: 14px;
+            font-style: italic;
+            opacity: 0.95;
+            margin: 0;
+            font-weight: 300;
+            letter-spacing: 0.3px;
+        }
+
+        .quote-section {
+            background: linear-gradient(135deg, var(--light-green) 0%, var(--light-purple) 100%);
+            padding: 20px;
+            text-align: center;
+            margin: 15px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .quote-text {
+            font-size: 16px;
+            font-style: italic;
+            color: var(--text-dark);
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        .section {
+            background: white;
+            margin: 15px;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        body.dark-mode .section { background: #252525; }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--dark-purple);
+            margin-bottom: 20px;
+            text-align: center;
+            position: relative;
+            padding-bottom: 12px;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-green), var(--primary-purple));
+            border-radius: 2px;
+        }
+
+        .form-group { margin-bottom: 18px; }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text-dark);
+            font-size: 14px;
+        }
+
+        .input-field, .textarea-field {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 16px;
+            font-family: inherit;
+            color: var(--text-dark);
+            background: var(--background-light);
+            transition: all 0.3s ease;
+            resize: vertical;
+        }
+
+        .input-field:focus, .textarea-field:focus {
+            outline: none;
+            border-color: var(--primary-purple);
+            box-shadow: 0 0 0 3px rgba(216, 181, 232, 0.1);
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .dashboard-card {
+            background: linear-gradient(135deg, var(--light-purple) 0%, var(--warm-beige) 100%);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        body.dark-mode .dashboard-card {
+            background: linear-gradient(135deg, #404040, #2a2a2a);
+        }
+
+        .card-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--dark-purple);
+            margin-bottom: 8px;
+        }
+
+        .card-label {
+            font-size: 13px;
+            color: var(--text-light);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .progress-bar-container {
+            background: var(--border-color);
+            height: 16px;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 12px;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .progress-bar {
+            background: linear-gradient(90deg, var(--accent-green), var(--primary-purple));
+            height: 100%;
+            border-radius: 8px;
+            transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 0 10px rgba(129, 199, 132, 0.4);
+        }
+
+        .progress-text {
+            font-size: 13px;
+            color: var(--text-light);
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .tracker-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(45px, 1fr));
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+
+        .day-circle {
+            aspect-ratio: 1 / 1;
+            border-radius: 50%;
+            border: 3px solid var(--primary-purple);
+            background: white;
+            color: var(--dark-purple);
+            font-size: 12px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            user-select: none;
+        }
+
+        body.dark-mode .day-circle {
+            background: #2a2a2a;
+            border-color: var(--primary-purple);
+            color: var(--light-purple);
+        }
+
+        .day-circle:active { transform: scale(0.9); }
+
+        .day-circle.completed {
+            background: linear-gradient(135deg, var(--accent-green), var(--light-green));
+            border-color: var(--accent-green);
+            color: white;
+            box-shadow: 0 4px 12px rgba(129, 199, 132, 0.4);
+        }
+
+        .day-circle.milestone {
+            background: linear-gradient(135deg, #ffd700, #ffed4e);
+            border-color: #ffa500;
+            color: #333;
+            box-shadow: 0 4px 12px rgba(255, 215, 0, 0.6);
+        }
+
+        .milestone-section {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+
+        .milestone-content {
+            background: white;
+            padding: 40px 30px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+            max-width: 400px;
+            animation: popIn 0.5s ease-out;
+        }
+
+        body.dark-mode .milestone-content { background: #252525; }
+
+        @keyframes popIn {
+            0% { transform: scale(0.8); opacity: 0; }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .btn {
+            padding: 14px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: inline-block;
+            width: 100%;
+            margin-bottom: 10px;
+            font-family: inherit;
+        }
+
+        .btn:active { transform: scale(0.98); }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-purple), var(--dark-purple));
+            color: white;
+            box-shadow: 0 4px 8px rgba(153, 102, 204, 0.3);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, var(--accent-green), var(--light-green));
+            color: white;
+            box-shadow: 0 4px 8px rgba(129, 199, 132, 0.3);
+        }
+
+        .auto-save-note {
+            font-size: 12px;
+            color: var(--accent-green);
+            margin-top: 8px;
+            font-weight: 500;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 30px 20px;
+            color: var(--text-light);
+            font-size: 13px;
+            border-top: 1px solid var(--border-color);
+            background: var(--background-light);
+            margin-top: 20px;
+        }
+
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            pointer-events: none;
+            animation: fall 3s linear forwards;
+            z-index: 999;
+        }
+
+        @keyframes fall {
+            to { transform: translateY(100vh) rotateZ(360deg); opacity: 0; }
+        }
+
+        @media (min-width: 768px) {
+            .container { max-width: 700px; }
+            .tracker-grid { grid-template-columns: repeat(auto-fit, minmax(55px, 1fr)); gap: 14px; }
+            .header { padding: 35px 25px 25px; }
+            .app-title { font-size: 32px; }
+            .section { margin: 20px; padding: 28px; }
+        }
+    </style>
 </head>
 <body>
     <div class="container">
-        <!-- Header Section -->
         <header class="header">
             <div class="header-content">
                 <div class="branding">
                     <h1 class="app-title">🌸 Blossom Springs</h1>
                     <p class="app-subtitle">100-Day Challenge Tracker</p>
                 </div>
-                <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
-                    <span class="theme-icon">🌙</span>
-                </button>
+                <button class="theme-toggle" id="themeToggle">🌙</button>
             </div>
             <p class="inspirational-quote">"Small daily actions create extraordinary results."</p>
         </header>
 
-        <!-- Motivation Quote of the Day -->
         <section class="quote-section">
             <p id="dailyQuote" class="quote-text">Loading your daily inspiration...</p>
         </section>
 
-        <!-- User Profile Section -->
         <section class="section profile-section">
             <h2 class="section-title">Your Challenge</h2>
             <div class="form-group">
@@ -53,7 +432,6 @@
             </div>
         </section>
 
-        <!-- Progress Dashboard -->
         <section class="section dashboard-section">
             <h2 class="section-title">Progress Dashboard</h2>
             <div class="dashboard-grid">
@@ -75,110 +453,360 @@
                 </div>
             </div>
             
-            <!-- Progress Bar -->
             <div class="progress-bar-container">
                 <div class="progress-bar" id="progressBar" style="width: 0%"></div>
             </div>
             <p class="progress-text" id="progressText">Start your journey today!</p>
         </section>
 
-        <!-- Milestone Celebrations -->
         <section class="milestone-section" id="milestoneSection" style="display: none;">
             <div class="milestone-content">
                 <h3 id="milestoneTitle">🎉 Milestone Reached! 🎉</h3>
-                <p id="milestoneMessage">You're making incredible progress!</p>
+                <p id="milestoneMessage" style="margin: 15px 0 25px;">You're making incredible progress!</p>
                 <button class="btn btn-primary" onclick="closeMilestone()">Continue Your Journey</button>
             </div>
         </section>
 
-        <!-- Completion Certificate (Hidden by default) -->
-        <section class="certificate-section" id="certificateSection" style="display: none;">
-            <div class="certificate">
-                <div class="certificate-header">
-                    <h2>🏆 Certificate of Achievement 🏆</h2>
-                </div>
-                <div class="certificate-body">
-                    <p class="cert-text">This is to certify that</p>
-                    <p class="cert-name" id="certName">Participant</p>
-                    <p class="cert-text">has successfully completed the</p>
-                    <p class="cert-title">Blossom Springs 100-Day Challenge</p>
-                    <p class="cert-text">achieving their goal of</p>
-                    <p class="cert-goal" id="certGoal">personal growth</p>
-                    <p class="cert-text">Completed on <span id="certDate">Date</span></p>
-                </div>
-                <div class="certificate-footer">
-                    <p>Blossom Springs Team</p>
-                </div>
-            </div>
-            <div class="certificate-actions">
-                <button class="btn btn-primary" onclick="downloadCertificate()">Download Certificate</button>
-                <button class="btn btn-secondary" onclick="closeCertificate()">Close</button>
-            </div>
-        </section>
-
-        <!-- 100-Day Tracker Grid -->
         <section class="section tracker-section">
             <h2 class="section-title">Your 100-Day Tracker</h2>
-            <div class="tracker-grid" id="trackerGrid">
-                <!-- 100 circles will be generated by JavaScript -->
-            </div>
+            <div class="tracker-grid" id="trackerGrid"></div>
         </section>
 
-        <!-- Weekly Reflection Section -->
         <section class="section reflection-section">
             <h2 class="section-title">Weekly Reflection</h2>
             <div class="form-group">
                 <label for="weeklyReflection">What's on your mind this week?</label>
-                <textarea id="weeklyReflection" placeholder="Write your thoughts, progress, and observations..." class="textarea-field" rows="5"></textarea>
+                <textarea id="weeklyReflection" placeholder="Write your thoughts, progress, and observations..." class="input-field" rows="5"></textarea>
             </div>
             <p class="auto-save-note">💾 Auto-saved to your device</p>
         </section>
 
-        <!-- Accountability Features Section -->
         <section class="section accountability-section">
             <h2 class="section-title">Progress Summary</h2>
             <button class="btn btn-primary" onclick="generateSummary()">Generate Summary Card</button>
-            <div id="summaryCard" class="summary-card" style="display: none;">
-                <div class="summary-content">
-                    <div class="summary-header">
-                        <h3 id="summaryName">Challenge Tracker</h3>
-                    </div>
-                    <div class="summary-body">
-                        <p><strong>Goal:</strong> <span id="summaryGoal">Not set</span></p>
-                        <p><strong>Completion:</strong> <span id="summaryCompletion">0%</span></p>
-                        <p><strong>Current Streak:</strong> <span id="summaryStreak">0 days</span></p>
-                        <p><strong>Days Completed:</strong> <span id="summaryDays">0 days</span></p>
-                        <p><strong>Generated:</strong> <span id="summaryDate">Date</span></p>
-                    </div>
+            <div id="summaryCard" style="display: none; background: linear-gradient(135deg, var(--light-green), var(--light-purple)); padding: 20px; border-radius: 12px; margin-top: 15px; border: 2px solid var(--accent-green);">
+                <div style="text-align: center; margin-bottom: 15px; padding-bottom: 12px; border-bottom: 2px solid var(--primary-purple);">
+                    <h3 id="summaryName" style="font-size: 18px; color: var(--dark-purple); margin: 0;">Challenge Tracker</h3>
                 </div>
-                <button class="btn btn-secondary" onclick="shareProgress()">Share on WhatsApp</button>
+                <div style="font-size: 14px; color: var(--text-dark); line-height: 1.8;">
+                    <p><strong>Goal:</strong> <span id="summaryGoal">Not set</span></p>
+                    <p><strong>Completion:</strong> <span id="summaryCompletion">0%</span></p>
+                    <p><strong>Current Streak:</strong> <span id="summaryStreak">0 days</span></p>
+                    <p><strong>Days Completed:</strong> <span id="summaryDays">0 days</span></p>
+                    <p><strong>Generated:</strong> <span id="summaryDate">Date</span></p>
+                </div>
+                <button class="btn btn-secondary" onclick="shareProgress()" style="margin-top: 15px;">Share on WhatsApp</button>
             </div>
         </section>
 
-        <!-- Action Buttons -->
-        <section class="section actions-section">
+        <section class="section">
             <button class="btn btn-secondary" onclick="resetChallenge()">Reset Challenge</button>
-            <button class="btn btn-secondary" onclick="installPWA()" id="installButton" style="display: none;">Install App</button>
         </section>
 
-        <!-- Footer -->
         <footer class="footer">
             <p>Blossom Springs © 2024 | Made with 💜 for your growth</p>
         </footer>
     </div>
 
-    <!-- Confetti Container -->
-    <div id="confettiContainer"></div>
-
-    <!-- Service Worker Registration -->
     <script>
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('service-worker.js')
-                .then(reg => console.log('Service Worker registered'))
-                .catch(err => console.log('Service Worker registration failed:', err));
+        const STORAGE_KEYS = {
+            name: 'bs_user_name',
+            goal: 'bs_user_goal',
+            startDate: 'bs_start_date',
+            completedDays: 'bs_completed_days',
+            weeklyReflection: 'bs_weekly_reflection',
+            themeMode: 'bs_theme_mode'
+        };
+
+        const MOTIVATIONAL_QUOTES = [
+            "Small daily actions create extraordinary results.",
+            "Progress, not perfection, is the goal.",
+            "Every day is a chance to grow.",
+            "You are stronger than you think.",
+            "Consistency is the key to success.",
+            "Your effort today shapes your tomorrow.",
+            "Believe in the power of persistence.",
+            "One day at a time, you're creating magic.",
+            "You've got this! Keep going!",
+            "Your future self will thank you.",
+            "Growth happens outside your comfort zone.",
+            "Every completion is a victory.",
+            "You are capable of amazing things.",
+            "Stay committed to your vision.",
+            "The best time is now.",
+            "You are worthy of your goals.",
+            "Small steps lead to big changes.",
+            "Your journey is unique and beautiful.",
+            "Celebrate every progress, no matter how small.",
+            "You are a work in progress, and that's okay."
+        ];
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeTheme();
+            loadUserData();
+            generateTrackerGrid();
+            updateDashboard();
+            displayDailyQuote();
+            setupEventListeners();
+        });
+
+        function initializeTheme() {
+            const savedTheme = localStorage.getItem(STORAGE_KEYS.themeMode);
+            if (savedTheme === 'dark') {
+                document.body.classList.add('dark-mode');
+                updateThemeToggle();
+            }
+        }
+
+        document.getElementById('themeToggle').addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            const isDark = document.body.classList.contains('dark-mode');
+            localStorage.setItem(STORAGE_KEYS.themeMode, isDark ? 'dark' : 'light');
+            updateThemeToggle();
+        });
+
+        function updateThemeToggle() {
+            const isDark = document.body.classList.contains('dark-mode');
+            document.getElementById('themeToggle').textContent = isDark ? '☀️' : '🌙';
+        }
+
+        function displayDailyQuote() {
+            const today = new Date().toDateString();
+            const lastQuoteDate = localStorage.getItem('bs_last_quote_date');
+            
+            let todayQuote;
+            if (lastQuoteDate === today) {
+                todayQuote = localStorage.getItem('bs_today_quote');
+            } else {
+                const randomIndex = Math.floor(Math.random() * MOTIVATIONAL_QUOTES.length);
+                todayQuote = MOTIVATIONAL_QUOTES[randomIndex];
+                localStorage.setItem('bs_today_quote', todayQuote);
+                localStorage.setItem('bs_last_quote_date', today);
+            }
+            
+            document.getElementById('dailyQuote').textContent = `✨ ${todayQuote} ✨`;
+        }
+
+        function generateTrackerGrid() {
+            const trackerGrid = document.getElementById('trackerGrid');
+            trackerGrid.innerHTML = '';
+
+            for (let day = 1; day <= 100; day++) {
+                const circle = document.createElement('div');
+                circle.className = 'day-circle';
+                circle.textContent = day;
+                circle.id = `day-${day}`;
+                circle.addEventListener('click', () => toggleDay(day));
+
+                const completedDays = getCompletedDays();
+                if (completedDays.includes(day)) {
+                    circle.classList.add('completed');
+                }
+
+                if ([25, 50, 75, 100].includes(day)) {
+                    circle.classList.add('milestone');
+                }
+
+                trackerGrid.appendChild(circle);
+            }
+        }
+
+        function toggleDay(day) {
+            let completedDays = getCompletedDays();
+            const dayElement = document.getElementById(`day-${day}`);
+
+            if (completedDays.includes(day)) {
+                completedDays = completedDays.filter(d => d !== day);
+                dayElement.classList.remove('completed');
+            } else {
+                completedDays.push(day);
+                completedDays.sort((a, b) => a - b);
+                dayElement.classList.add('completed');
+
+                if ([25, 50, 75, 100].includes(day)) {
+                    showMilestoneNotification(day);
+                    createConfetti();
+                }
+            }
+
+            localStorage.setItem(STORAGE_KEYS.completedDays, JSON.stringify(completedDays));
+            updateDashboard();
+        }
+
+        function getCompletedDays() {
+            const saved = localStorage.getItem(STORAGE_KEYS.completedDays);
+            return saved ? JSON.parse(saved) : [];
+        }
+
+        function updateDashboard() {
+            const completedDays = getCompletedDays();
+            const daysCompleted = completedDays.length;
+            const progressPercentage = Math.round((daysCompleted / 100) * 100);
+            const daysRemaining = 100 - daysCompleted;
+            const currentStreak = calculateStreak();
+
+            document.getElementById('daysCompleted').textContent = daysCompleted;
+            document.getElementById('progressPercentage').textContent = `${progressPercentage}%`;
+            document.getElementById('currentStreak').textContent = currentStreak;
+            document.getElementById('daysRemaining').textContent = daysRemaining;
+            document.getElementById('progressBar').style.width = `${progressPercentage}%`;
+
+            if (daysCompleted === 0) {
+                document.getElementById('progressText').textContent = 'Start your journey today!';
+            } else if (progressPercentage < 25) {
+                document.getElementById('progressText').textContent = `You're ${progressPercentage}% through! Keep it going! 💪`;
+            } else if (progressPercentage < 50) {
+                document.getElementById('progressText').textContent = `Halfway there! You're crushing it! 🔥`;
+            } else if (progressPercentage < 75) {
+                document.getElementById('progressText').textContent = `Over 50%! You've got the momentum! ⚡`;
+            } else if (progressPercentage < 100) {
+                document.getElementById('progressText').textContent = `Almost there! The finish line is in sight! 🏁`;
+            } else {
+                document.getElementById('progressText').textContent = `🎉 You've completed the challenge! 🎉`;
+            }
+        }
+
+        function calculateStreak() {
+            const completedDays = getCompletedDays();
+            let streak = 0;
+            for (let day = Math.max(...completedDays, 0); day >= 1; day--) {
+                if (completedDays.includes(day)) {
+                    streak++;
+                } else {
+                    break;
+                }
+            }
+            return streak;
+        }
+
+        function showMilestoneNotification(day) {
+            const milestoneMessages = {
+                25: { title: '🎉 25 Days! 🎉', message: 'Quarter of the way there! Keep crushing it! 💪' },
+                50: { title: '🔥 50 Days! 🔥', message: 'Halfway done! You\'re unstoppable! 🚀' },
+                75: { title: '⭐ 75 Days! ⭐', message: 'So close to the finish! One final push! 🏆' },
+                100: { title: '🏆 100 Days Complete! 🏆', message: 'You\'ve done it! Congratulations! 🌟' }
+            };
+
+            const milestone = milestoneMessages[day];
+            if (milestone) {
+                document.getElementById('milestoneTitle').textContent = milestone.title;
+                document.getElementById('milestoneMessage').textContent = milestone.message;
+                document.getElementById('milestoneSection').style.display = 'flex';
+            }
+        }
+
+        function closeMilestone() {
+            document.getElementById('milestoneSection').style.display = 'none';
+        }
+
+        function createConfetti() {
+            const colors = ['#d8b5e8', '#81c784', '#f8bbd0', '#ffd700', '#b896d8'];
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.opacity = Math.random();
+                document.body.appendChild(confetti);
+                setTimeout(() => confetti.remove(), 4000);
+            }
+        }
+
+        function loadUserData() {
+            const savedName = localStorage.getItem(STORAGE_KEYS.name);
+            const savedGoal = localStorage.getItem(STORAGE_KEYS.goal);
+            const savedStartDate = localStorage.getItem(STORAGE_KEYS.startDate);
+            const savedReflection = localStorage.getItem(STORAGE_KEYS.weeklyReflection);
+
+            if (savedName) document.getElementById('userName').value = savedName;
+            if (savedGoal) document.getElementById('userGoal').value = savedGoal;
+            if (savedStartDate) document.getElementById('startDate').value = savedStartDate;
+            if (savedReflection) document.getElementById('weeklyReflection').value = savedReflection;
+        }
+
+        function setupEventListeners() {
+            document.getElementById('userName').addEventListener('input', (e) => {
+                localStorage.setItem(STORAGE_KEYS.name, e.target.value);
+            });
+
+            document.getElementById('userGoal').addEventListener('input', (e) => {
+                localStorage.setItem(STORAGE_KEYS.goal, e.target.value);
+            });
+
+            document.getElementById('startDate').addEventListener('change', (e) => {
+                localStorage.setItem(STORAGE_KEYS.startDate, e.target.value);
+            });
+
+            let reflectionTimeout;
+            document.getElementById('weeklyReflection').addEventListener('input', (e) => {
+                clearTimeout(reflectionTimeout);
+                reflectionTimeout = setTimeout(() => {
+                    localStorage.setItem(STORAGE_KEYS.weeklyReflection, e.target.value);
+                }, 1000);
+            });
+        }
+
+        function generateSummary() {
+            const completedDays = getCompletedDays().length;
+            const progressPercentage = Math.round((completedDays / 100) * 100);
+            const currentStreak = calculateStreak();
+            const userName = document.getElementById('userName').value || 'Challenge Tracker';
+            const userGoal = document.getElementById('userGoal').value || 'Not set';
+            const today = new Date().toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+            });
+
+            document.getElementById('summaryName').textContent = userName;
+            document.getElementById('summaryGoal').textContent = userGoal;
+            document.getElementById('summaryCompletion').textContent = `${progressPercentage}%`;
+            document.getElementById('summaryStreak').textContent = `${currentStreak} days`;
+            document.getElementById('summaryDays').textContent = `${completedDays} days`;
+            document.getElementById('summaryDate').textContent = today;
+
+            document.getElementById('summaryCard').style.display = 'block';
+        }
+
+        function shareProgress() {
+            const completedDays = getCompletedDays().length;
+            const progressPercentage = Math.round((completedDays / 100) * 100);
+            const currentStreak = calculateStreak();
+            const userName = document.getElementById('userName').value || 'I';
+            const userGoal = document.getElementById('userGoal').value || 'my goal';
+
+            const message = `🌸 *Blossom Springs 100-Day Challenge Update* 🌸\n\n` +
+                `📊 *Progress:* ${progressPercentage}% (${completedDays}/100 days)\n` +
+                `🔥 *Current Streak:* ${currentStreak} days\n` +
+                `🎯 *Goal:* ${userGoal}\n` +
+                `👤 *Challenger:* ${userName}\n\n` +
+                `"Small daily actions create extraordinary results."\n\n` +
+                `💪 Keep going! Every day counts! 💜`;
+
+            const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
+            window.open(whatsappUrl, '_blank');
+        }
+
+        function resetChallenge() {
+            const confirmReset = confirm('Are you sure you want to reset your challenge? This will delete all your progress data.');
+
+            if (confirmReset) {
+                Object.values(STORAGE_KEYS).forEach(key => {
+                    localStorage.removeItem(key);
+                });
+
+                document.getElementById('userName').value = '';
+                document.getElementById('userGoal').value = '';
+                document.getElementById('startDate').value = '';
+                document.getElementById('weeklyReflection').value = '';
+                document.getElementById('summaryCard').style.display = 'none';
+
+                generateTrackerGrid();
+                updateDashboard();
+
+                alert('✨ Your challenge has been reset. Ready to start fresh!');
+            }
         }
     </script>
-
-    <script src="script.js"></script>
 </body>
 </html>
